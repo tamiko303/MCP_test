@@ -17,10 +17,11 @@ export async function handleGetPackage(args: any) {
         };
 
         const package_structure_response = await makeAdtRequest(nodeContentsUrl, 'POST', 30000, undefined, nodeContentsParams);
-        const result = convert.xml2js(package_structure_response.data, {compact: true});
-        
+        const result = convert.xml2js(package_structure_response.data, { compact: true });
+
         const nodes = result["asx:abap"]?.["asx:values"]?.DATA?.TREE_CONTENT?.SEU_ADT_REPOSITORY_OBJ_NODE || [];
-        const extractedData = (Array.isArray(nodes) ? nodes : [nodes]).filter(node => 
+
+        const extractedData = (Array.isArray(nodes) ? nodes : [nodes]).filter(node =>
             node.OBJECT_NAME?._text && node.OBJECT_URI?._text
         ).map(node => ({
             OBJECT_TYPE: node.OBJECT_TYPE._text,
