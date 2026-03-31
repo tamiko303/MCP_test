@@ -20,4 +20,5 @@ jobs:
             git pull
             npm install --legacy-peer-deps
             npm run build
-            pm2 restart mcp || pm2 start dist/index.js --name mcp
+            pm2 restart mcp-bridge || pm2 start dist/bridge.js --name mcp-bridge
+            pm2 save
