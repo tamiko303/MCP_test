@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package.json ./
 
 # Install dependencies
-RUN npm install -r
+RUN npm install
 
 
 # Copy the rest of the application code
@@ -22,4 +22,4 @@ RUN npm run build
 EXPOSE 5173
 
 # Start the application
-CMD ["node", "./dist/index.js"]
+CMD ["node", "dist/index.js"]
