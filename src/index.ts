@@ -24,6 +24,7 @@ import { handleGetTypeInfo } from './handlers/handleGetTypeInfo';
 import { handleGetInterface } from './handlers/handleGetInterface';
 import { handleGetTransaction } from './handlers/handleGetTransaction';
 import { handleSearchObject } from './handlers/handleSearchObject';
+import { handleGetBusinessPartner } from './handlers/handleGetBusinessPartner';
 
 // Import shared utility functions and types
 import { getBaseUrl, getAuthHeaders, createAxiosInstance, makeAdtRequest, return_error, return_response } from './lib/utils';
@@ -296,6 +297,20 @@ export class mcp_abap_adt_server {
               },
               required: ['interface_name']
             }
+          },
+          {
+            name: 'GetBusinessPartner',
+            description: 'Retrieve BusinessPartner information',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                partner_number: {
+                  type: 'string',
+                  description: 'Number BusinessPartner'
+                }
+              },
+              required: ['partner_number']
+            }
           }
         ]
       };
@@ -330,6 +345,8 @@ export class mcp_abap_adt_server {
           return await handleGetInterface(request.params.arguments);
         case 'GetTransaction':
           return await handleGetTransaction(request.params.arguments);
+        case 'GetBusinessPartner':
+          return await handleGetBusinessPartner(request.params.arguments);
         default:
           throw new McpError(
             ErrorCode.MethodNotFound,
