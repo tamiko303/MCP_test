@@ -300,13 +300,13 @@ export class mcp_abap_adt_server {
           },
           {
             name: 'GetBusinessPartner',
-            description: 'Retrieve BusinessPartner information',
+            description: 'Retrieve information about a business partner',
             inputSchema: {
               type: 'object',
               properties: {
                 partner_number: {
                   type: 'string',
-                  description: 'Number BusinessPartner'
+                  description: 'Partner number'
                 }
               },
               required: ['partner_number']
