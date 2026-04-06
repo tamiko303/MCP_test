@@ -2,6 +2,7 @@ import express from "express";
 import { spawn } from "child_process";
 
 const app = express();
+app.use(express.json());
 
 app.get("/sse", (req, res) => {
     res.setHeader("Content-Type", "text/event-stream");
@@ -14,8 +15,21 @@ app.get("/sse", (req, res) => {
         stdio: ["pipe", "pipe", "pipe"]
     });
 
+    // 👉 отправляем init (КРИТИЧНО)
+    const initMessage = {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "initialize",
+        params: {}
+    };
+
+    mcp.stdin.write(JSON.stringify(initMessage) + "\n");
+
     mcp.stdout.on("data", (data) => {
-        res.write(`data: ${data.toString()}\n\n`);
+        const text = data.toString();
+        console.log("MCP:", text);
+
+        res.write(`data: ${text}\n\n`);
     });
 
     mcp.stderr.on("data", (data) => {
