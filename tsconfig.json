@@ -19,8 +19,7 @@
     "noImplicitAny": false
   },
   "include": [
-    "src/**/*",
-    "proxy.js"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"
