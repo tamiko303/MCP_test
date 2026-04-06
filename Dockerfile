@@ -6,7 +6,7 @@ FROM node:25
 WORKDIR /app
 
 # Copy package.json
-COPY package.json ./
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install
@@ -19,7 +19,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port the app runs on
-EXPOSE 5173
+EXPOSE 8000
 
 # Start the application
-CMD ["node", "dist/index.js"]
+CMD ["node", "proxy.js"]
