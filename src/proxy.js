@@ -1,52 +1,45 @@
 import express from "express";
+import { createServer } from "http";
+import { WebSocketServer } from "ws";
 import { spawn } from "child_process";
 
 const app = express();
-app.use(express.json());
+const server = createServer(app);
 
-app.get("/sse", (req, res) => {
-    res.setHeader("Content-Type", "text/event-stream");
-    res.setHeader("Cache-Control", "no-cache");
-    res.setHeader("Connection", "keep-alive");
+// WebSocket сервер (лучше чем SSE для MCP)
+const wss = new WebSocketServer({ server });
 
+wss.on("connection", (ws) => {
     console.log("Client connected");
 
     const mcp = spawn("node", ["dist/index.js"], {
         stdio: ["pipe", "pipe", "pipe"]
     });
 
-    // 👉 отправляем init (КРИТИЧНО)
-    const initMessage = {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "initialize",
-        params: {}
-    };
-
-    mcp.stdin.write(JSON.stringify(initMessage) + "\n");
-
+    // 👉 MCP → клиент
     mcp.stdout.on("data", (data) => {
-        const text = data.toString();
-        console.log("MCP:", text);
+        ws.send(data.toString());
+    });
 
-        res.write(`data: ${text}\n\n`);
+    // 👉 клиент → MCP
+    ws.on("message", (message) => {
+        mcp.stdin.write(message.toString() + "\n");
+    });
+
+    ws.on("close", () => {
+        console.log("Client disconnected");
+        mcp.kill();
     });
 
     mcp.stderr.on("data", (data) => {
         console.error("MCP error:", data.toString());
     });
 
-    mcp.on("close", (code) => {
-        console.log("MCP exited:", code);
-        res.end();
-    });
-
-    req.on("close", () => {
-        console.log("Client disconnected");
-        mcp.kill();
+    mcp.on("close", () => {
+        ws.close();
     });
 });
 
-app.listen(8000, () => {
-    console.log("✅ MCP Proxy running on port 8000");
+server.listen(8000, () => {
+    console.log("✅ MCP WebSocket proxy running on 8000");
 });
