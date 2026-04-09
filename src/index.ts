@@ -25,7 +25,6 @@ import { handleGetInterface } from './handlers/handleGetInterface';
 import { handleGetTransaction } from './handlers/handleGetTransaction';
 import { handleSearchObject } from './handlers/handleSearchObject';
 import { handleGetBusinessPartner } from './handlers/handleGetBusinessPartner';
-
 // Import shared utility functions and types
 import { getBaseUrl, getAuthHeaders, createAxiosInstance, makeAdtRequest, return_error, return_response } from './lib/utils';
 
@@ -199,6 +198,18 @@ export class mcp_abap_adt_server {
                 table_name: {
                   type: 'string',
                   description: 'Name of the ABAP table'
+                },
+                fields: {
+                  type: 'string[]',
+                  description: 'Fields to select'
+                },
+                where_clause: {
+                  type: 'string',
+                  description: 'List of selection conditionse'
+                },
+                row_skip: {
+                  type: 'number',
+                  description: 'Maximum number of rows to skip'
                 },
                 max_rows: {
                   type: 'number',
