@@ -273,15 +273,6 @@ function chunkString(str: string, size: number): string[] {
 }
 
 // ─── Parse SOAP-response ───
-// export function parseSoapResponse(xml: string): GetTableContentsResult {
-//   const parser = new XMLParser({
-//     ignoreAttributes: false,
-//     removeNSPrefix: true,          // remove namespace prefixes
-//     isArray: (name) => name === "item", // <item> is always an array
-//   });
-
-//   const parsed = parser.parse(xml);
-
 export function parseSoapResponse(xml: string): GetTableContentsResult {
   // xml-js synchronous, compact:true - the most convenient structure for navigation
   const parsed = convert.xml2js(xml, {
@@ -292,8 +283,8 @@ export function parseSoapResponse(xml: string): GetTableContentsResult {
     trim: true,
   }) as any;
 
-  // Убираем namespace-префиксы вручную (xml-js их сохраняет)
-  // "soapenv:Envelope" → ищем ключ содержащий "Envelope"
+  // Remove namespace prefixes manually (xml-js preserves them)
+  // "soapenv:Envelope" → look for a key containing "Envelope"
   const envelope = findKey(parsed, 'Envelope');
   const body     = findKey(envelope, 'Body');
   const rfc      = findKey(body, 'RFC_READ_TABLEResponse') ??
@@ -326,9 +317,9 @@ export function parseSoapResponse(xml: string): GetTableContentsResult {
   });
 
   return { fields, rows, totalRows: rows.length };
- }
+}
 
- // ─── Helpers ────
+// ─── Helpers ────
 
 // XML-js in compact mode stores text in the _text property
 function getText(node: any): string {
