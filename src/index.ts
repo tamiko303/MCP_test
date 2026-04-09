@@ -200,8 +200,9 @@ export class mcp_abap_adt_server {
                   description: 'Name of the ABAP table'
                 },
                 fields: {
-                  type: 'string[]',
-                  description: 'Fields to select'
+                 type: "array",
+                 items: { type: "string" },
+                 description: "Fields to select"
                 },
                 where_clause: {
                   type: 'string',

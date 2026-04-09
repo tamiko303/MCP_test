@@ -207,7 +207,14 @@ export function buildSoapEnvelope(tableName: string, args: GetTableContentsArgs)
   const rowSkip = args.row_skip ?? 0;
 
   // FIELDS table
-  const fieldsXml = (args.fields ?? [])
+  const rawFields = args.fields ?? [];
+  const fieldsArray = Array.isArray(rawFields) 
+  ? rawFields 
+  : typeof rawFields === 'string' 
+      ? JSON.parse(rawFields) 
+      : [];
+
+  const fieldsXml = fieldsArray
     .map(
       (f) => `
         <item>
