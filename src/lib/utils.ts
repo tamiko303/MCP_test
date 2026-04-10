@@ -128,11 +128,11 @@ async function fetchCsrfToken(url: string): Promise<string> {
 
 export async function makeAdtRequest(url: string, method: string, timeout: number, data?: any, params?: any) {
     // For POST/PUT requests, ensure we have a CSRF token
-    if ((method === 'POST' || method === 'PUT') && !csrfToken) {
+    if ((method === 'POST' || method === 'PUT' || method === 'PATCH' ) && !csrfToken) {
         try {
             csrfToken = await fetchCsrfToken(url);
         } catch (error) {
-            throw new Error('CSRF token is required for POST/PUT requests but could not be fetched');
+            throw new Error('CSRF token is required for POST/PUT/PATCH requests but could not be fetched');
         }
     }
 
@@ -141,7 +141,7 @@ export async function makeAdtRequest(url: string, method: string, timeout: numbe
     };
 
     // Add CSRF token for POST/PUT requests
-    if ((method === 'POST' || method === 'PUT') && csrfToken) {
+    if ((method === 'POST' || method === 'PUT' || method === 'PATCH') && csrfToken) {
         requestHeaders['x-csrf-token'] = csrfToken;
     }
 
