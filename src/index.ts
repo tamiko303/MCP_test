@@ -25,6 +25,8 @@ import { handleGetInterface } from './handlers/handleGetInterface';
 import { handleGetTransaction } from './handlers/handleGetTransaction';
 import { handleSearchObject } from './handlers/handleSearchObject';
 import { handleGetBusinessPartner } from './handlers/handleGetBusinessPartner';
+import { handleSetSupplierPurchasingBlock } from './handlers/handleSetSupplierPurchasingBlock';
+
 // Import shared utility functions and types
 import { getBaseUrl, getAuthHeaders, createAxiosInstance, makeAdtRequest, return_error, return_response } from './lib/utils';
 
@@ -323,6 +325,28 @@ export class mcp_abap_adt_server {
               },
               required: ['partner_number']
             }
+          },
+          {
+            name: 'SetSupplierPurchasingBlock',
+            description: 'Setting/removing purchase blocks from a supplier at the purchasing organization level',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                supplier: {
+                  type: 'string',
+                  description: `Supplier's Account Number`
+                },
+                purchasing_org: {
+                  type: 'string',
+                  description: 'Purchasing Organization'
+                },
+                blocked: {
+                  type: 'boolean',
+                  description: 'Purchasing block at purchasing org level'
+                }
+              },
+              required: ['supplier', 'purchasing_organization', 'is_blocked' ]
+            }
           }
         ]
       };
@@ -359,6 +383,8 @@ export class mcp_abap_adt_server {
           return await handleGetTransaction(request.params.arguments);
         case 'GetBusinessPartner':
           return await handleGetBusinessPartner(request.params.arguments);
+        case 'SetSupplierPurchasingBlock':
+          return await handleSetSupplierPurchasingBlock(request.params.arguments);
         default:
           throw new McpError(
             ErrorCode.MethodNotFound,
