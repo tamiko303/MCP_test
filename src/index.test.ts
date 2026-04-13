@@ -6,7 +6,6 @@ import { handleGetFunctionGroup } from './handlers/handleGetFunctionGroup';
 import { handleGetFunction } from './handlers/handleGetFunction';
 import { handleGetTable } from './handlers/handleGetTable';
 import { handleGetStructure } from './handlers/handleGetStructure';
-import { handleGetTableContents } from './handlers/handleGetTableContents';
 import { handleGetPackage } from './handlers/handleGetPackage';
 import { handleGetInclude } from './handlers/handleGetInclude';
 import { handleGetTypeInfo } from './handlers/handleGetTypeInfo';
