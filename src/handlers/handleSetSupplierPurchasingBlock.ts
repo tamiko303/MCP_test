@@ -21,7 +21,7 @@ export async function handleSetSupplierPurchasingBlock(args: any) {
 
         const supplierPOBody = { d: { PurchasingIsBlockedForSupplier: args.blocked } };
 
-        const patchResponse = await makeAdtRequest( url, 'PATCH', 30000,  supplierPOBody, undefined );
+        const patchResponse = await makeAdtRequest( url, 'PATCH', 30000,  supplierPOBody );
 
         const action = args.blocked ? 'blocked' : 'unblocked';
         const parseData = {

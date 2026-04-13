@@ -158,6 +158,12 @@ export async function makeAdtRequest(url: string, method: string, timeout: numbe
         params: params
     };
 
+    
+     // Include params in the request configuration if provided
+    if (params) {
+        config.params = params;
+    }
+
     // Include data in the request configuration if provided
     if (data) {
         config.data = data;
